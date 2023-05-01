@@ -58,8 +58,8 @@ public class ContactsRunner {
                 case 1:
                     System.out.printf("\n%-15s | %-12s |\n", "Name", "Phone number");
                     System.out.println("--------------------------------");
-                    for (int i = 0; i < data.size(); i++) {
-                        System.out.println(data.get(i));
+                    for (long i = 0; i < data.size(); i++) {
+                        System.out.println(data.get((int) i));
                     }
                     break;
 
@@ -71,17 +71,48 @@ public class ContactsRunner {
                     System.out.println("Enter Contact Last Name: ");
                     String contactLastNameInput = input.getString();
 
+                    String formattedNames = contactFirstNameInput + " " + contactLastNameInput;
+
+                    // Check if there's already a contact with the same name
+                    boolean contactExists = false;
+                    for (String line : Files.readAllLines(filePath)) {
+                        if (line.startsWith(formattedNames)) {
+                            contactExists = true;
+                            break;
+                        }
+                    }
+
+                    if (contactExists) {
+                        System.out.println("There's already a contact named " + formattedNames + ". Do you want to add the new contact? (Yes/No)");
+                        String answer = input.getString();
+                        if (answer.equalsIgnoreCase("Yes")) {
+                            System.out.println("Contact not saved.");
+                            break;
+                        }
+                    }
+
                     System.out.println("Enter Contact Phone Number");
-                    String contactPhoneNumber = String.valueOf(input.getInt());
+                    String contactPhoneNumber = String.valueOf(input.getLong());
 
                     String formattedName = contactFirstNameInput + " " + contactLastNameInput;
-                    String formattedPhoneNumber = contactPhoneNumber;
+                    String formattedPhoneNumber = contactPhoneNumber.substring(0, 3) + "-"  + contactPhoneNumber.substring(3, 6) + "-" + contactPhoneNumber.substring(6);
+
+                    if(contactPhoneNumber.length() == 10) {
+                        formattedPhoneNumber = contactPhoneNumber.substring(0, 3) + "-"  + contactPhoneNumber.substring(3, 6) + "-" + contactPhoneNumber.substring(6);
+
+                    } else if(contactPhoneNumber.length() == 7) {
+                        formattedPhoneNumber = contactPhoneNumber.substring(0, 3) + "-"  + contactPhoneNumber.substring(3);
+                    }else{
+                        System.out.println("Please enter a 7 to 10 digit phone number");
+                    }
+
+
 
                     // Pad the name and phone number strings with spaces to align them under the headers
-                    int namePadding = 15 - formattedName.length();
-                    int phonePadding = 12 - formattedPhoneNumber.length();
-                    formattedName += " ".repeat(Math.max(0, namePadding));
-                    formattedPhoneNumber = " ".repeat(Math.max(0, phonePadding)) + formattedPhoneNumber;
+                    long namePadding = 15 - formattedName.length();
+                    long phonePadding = 12 - formattedPhoneNumber.length();
+                    formattedName += " ".repeat((int) Math.max(0, namePadding));
+                    formattedPhoneNumber = " ".repeat((int) Math.max(0, phonePadding)) + formattedPhoneNumber;
 
                     // Format the contact details in a tabular format
                     String formattedLine = String.format("%s | %s |", formattedName, formattedPhoneNumber);

@@ -74,4 +74,14 @@ public class Input {
         return input;
     }
 
+    public long getLong() {
+        String input = scanner.next();
+        try {
+            return Long.valueOf(input);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Please enter an integer.");
+            return getInt();
+        }
+    }
+
 }
