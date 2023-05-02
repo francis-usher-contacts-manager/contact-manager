@@ -1,32 +1,16 @@
-package src;
-
 import util.Input;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Files.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.sql.SQLOutput;
 import java.util.Arrays;
 import java.util.List;
-import java.util.ArrayList;
-import java.nio.charset.Charset;
 
-
-import static java.nio.file.Files.readAllLines;
-import static java.nio.file.Files.write;
 public class ContactsRunner {
 
-    // building to file path
-    String currentDirectory = System.getProperty("user.dir");
-    String directory = currentDirectory + "/src/data";
-    String fileName = "contacts.txt";
-    Path filePath = Paths.get(directory, fileName);
-
-    Charset charConvert = StandardCharsets.UTF_8;
+    
     public static void main(String[] args) throws IOException {
         Boolean confirm;
 
@@ -45,7 +29,6 @@ public class ContactsRunner {
             String fileName = "contacts.txt";
             Path filePath = Paths.get(directory, fileName);
 
-            Charset charConvert = StandardCharsets.UTF_8;
             Input input = new Input();
             int initialInput = input.getInt();
 
@@ -56,6 +39,13 @@ public class ContactsRunner {
 
             switch (initialInput) {
                 case 1:
+                    System.out.println(" ______   ______   ___   __    _________  ________   ______  _________  ______      \n" +
+                            "/_____/\\ /_____/\\ /__/\\ /__/\\ /________/\\/_______/\\ /_____/\\/________/\\/_____/\\     \n" +
+                            "\\:::__\\/ \\:::_ \\ \\\\::\\_\\\\  \\ \\\\__.::.__\\/\\::: _  \\ \\\\:::__\\/\\__.::.__\\/\\::::_\\/_    \n" +
+                            " \\:\\ \\  __\\:\\ \\ \\ \\\\:. `-\\  \\ \\  \\::\\ \\   \\::(_)  \\ \\\\:\\ \\  __ \\::\\ \\   \\:\\/___/\\   \n" +
+                            "  \\:\\ \\/_/\\\\:\\ \\ \\ \\\\:. _    \\ \\  \\::\\ \\   \\:: __  \\ \\\\:\\ \\/_/\\ \\::\\ \\   \\_::._\\:\\  \n" +
+                            "   \\:\\_\\ \\ \\\\:\\_\\ \\ \\\\. \\`-\\  \\ \\  \\::\\ \\   \\:.\\ \\  \\ \\\\:\\_\\ \\ \\ \\::\\ \\    /____\\:\\ \n" +
+                            "    \\_____\\/ \\_____\\/ \\__\\/ \\__\\/   \\__\\/    \\__\\/\\__\\/ \\_____\\/  \\__\\/    \\_____\\/ ");
                     System.out.printf("\n%-15s | %-12s |\n", "Name", "Phone number");
                     System.out.println("--------------------------------");
                     for (long i = 0; i < data.size(); i++) {
@@ -71,6 +61,7 @@ public class ContactsRunner {
                     System.out.println("Enter Contact Last Name: ");
                     String contactLastNameInput = input.getString();
 
+
                     String formattedNames = contactFirstNameInput + " " + contactLastNameInput;
 
                     // Check if there's already a contact with the same name
@@ -83,9 +74,9 @@ public class ContactsRunner {
                     }
 
                     if (contactExists) {
-                        System.out.println("There's already a contact named " + formattedNames + ". Do you want to add the new contact? (Yes/No)");
+                        System.out.println("There's already a contact named " + formattedNames + ". Do you want to add the new contact anyway? (Y/N)");
                         String answer = input.getString();
-                        if (answer.equalsIgnoreCase("Yes")) {
+                        if (answer.equalsIgnoreCase("Y")) {
                             System.out.println("Contact not saved.");
                             break;
                         }
@@ -94,18 +85,21 @@ public class ContactsRunner {
                     System.out.println("Enter Contact Phone Number");
                     String contactPhoneNumber = String.valueOf(input.getLong());
 
-                    String formattedName = contactFirstNameInput + " " + contactLastNameInput;
-                    String formattedPhoneNumber = contactPhoneNumber.substring(0, 3) + "-"  + contactPhoneNumber.substring(3, 6) + "-" + contactPhoneNumber.substring(6);
+                    Contact newContact = new Contact(contactFirstNameInput, contactLastNameInput, contactPhoneNumber);
+                    String firstName = newContact.getFirstName();
+                    String lastName = newContact.getLastName();
+                    String number = newContact.getNumber();
+                    
+                    String formattedName = firstName + " " + lastName;
+                    String formattedPhoneNumber = null;
 
-                    if(contactPhoneNumber.length() == 10) {
-                        formattedPhoneNumber = contactPhoneNumber.substring(0, 3) + "-"  + contactPhoneNumber.substring(3, 6) + "-" + contactPhoneNumber.substring(6);
-
-                    } else if(contactPhoneNumber.length() == 7) {
-                        formattedPhoneNumber = contactPhoneNumber.substring(0, 3) + "-"  + contactPhoneNumber.substring(3);
+                    if(number.length() == 10) {
+                        formattedPhoneNumber = number.substring(0, 3) + "-"  + number.substring(3, 6) + "-" + number.substring(6);
+                    } else if(number.length() == 7) {
+                        formattedPhoneNumber = number.substring(0, 3) + "-"  + number.substring(3);
                     }else{
                         System.out.println("Please enter a 7 to 10 digit phone number");
                     }
-
 
 
                     // Pad the name and phone number strings with spaces to align them under the headers
@@ -162,4 +156,3 @@ public class ContactsRunner {
     }
 
 }
-//jlklklxklx
