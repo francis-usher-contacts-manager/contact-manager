@@ -126,6 +126,9 @@ public class ContactsRunner {
                         if (name.contains(searchParameter)) {
                             correctname = name;
                         }
+                        else {
+                            correctname = "No Contact Found.";
+                        }
                     }
 
                     System.out.println(correctname);
